@@ -144,16 +144,22 @@ CREATE TABLE Payment (
 
 -- Master Tables
 INSERT INTO Reward (RewardID, Season, PointsRequired, ExpirationDate, LevelRequired) VALUES
-(1, 'Summer 2025', 150, '2025-09-30 23:59:59', 1),
-(2, 'Winter 2025', 300, '2025-12-31 23:59:59', 2),
-(3, 'Spring 2026', 200, '2026-04-30 23:59:59', 1),
-(4, 'Fall 2025', 500, '2025-10-31 23:59:59', 3),
-(5, 'New Year 2026', 600, '2026-01-15 23:59:59', 4),
-(6, 'Special Event A', 250, '2025-11-20 23:59:59', 1),
-(7, 'Special Event B', 350, '2025-12-20 23:59:59', 2),
-(8, 'Anniversary', 450, '2026-05-01 23:59:59', 3),
-(9, 'Flash Promo', 120, '2025-08-15 23:59:59', 1),
-(10, 'VIP Exclusive', 800, '2026-02-28 23:59:59', 4);
+(1, 'Summer 2025', 150, '2025-09-30 23:59:59', 1),        
+(2, 'Winter 2025', 1500, '2025-12-31 23:59:59', 2),       
+(3, 'Spring 2026', 200, '2026-04-30 23:59:59', 1),        
+(4, 'Fall 2025', 4500, '2025-10-31 23:59:59', 3),        
+(5, 'New Year 2026', 12500, '2026-01-15 23:59:59', 4),  
+(6, 'Special Event A', 250, '2025-11-20 23:59:59', 1),   
+(7, 'Special Event B', 1800, '2025-12-20 23:59:59', 2),   
+(8, 'Anniversary', 5000, '2026-05-01 23:59:59', 3),   
+(9, 'Flash Promo', 120, '2025-08-15 23:59:59', 1),     
+(10, 'VIP Exclusive', 15000, '2026-02-28 23:59:59', 4),
+-- Rewards that are inactive (no Vouchers or Offers decided, and no Redeems yet)
+(11, 'Summer 2027', 150, '2027-09-30 23:59:59', 1),        
+(12, 'Winter 2027', 1500, '2027-12-31 23:59:59', 2),       
+(13, 'Spring 2027', 200, '2027-04-30 23:59:59', 1),        
+(14, 'Fall 2027', 4500, '2027-10-31 23:59:59', 3),        
+(15, 'New Year 2027', 12500, '2027-01-15 23:59:59', 4);
 
 INSERT INTO Voucher (RewardID, VoucherCode, PercentDiscount) VALUES
 (1, 'SUM2025-15', 15),
@@ -189,7 +195,14 @@ INSERT INTO Customer (customerID, firstName, lastName, emailAddress, phoneNumber
 (7, 'Michael', 'Brown', 'michael.b@example.com', '095-443-2211'),
 (8, 'Suda', 'Petchdee', 'suda.pd@example.com', '086-312-5522'),
 (9, 'David', 'Nguyen', 'david.ng@example.com', '084-222-9055'),
-(10, 'Preeda', 'Chanakul', 'preeda.ck@example.com', '089-600-7788');
+(10, 'Preeda', 'Chanakul', 'preeda.ck@example.com', '089-600-7788'),
+-- Customers who have signed up for a Membership (an Adiclub account) but who have not made
+-- any ordres or written any reviews yet
+(11, 'Warin', 'Saetang', 'warin.st@example.com', '099-000-1101'),
+(12, 'Thida', 'Boonyarit', 'thida.br@example.com', '099-000-1102'),
+(13, 'Kevin', 'Lopez', 'kevin.lp@example.com', '099-000-1103'),
+(14, 'Mina', 'Katsuragi', 'mina.kt@example.com', '099-000-1104'),
+(15, 'George', 'Hill', 'george.hl@example.com', '099-000-1105');
 
 INSERT INTO Members (memberID, customerID, firstName, lastName, membershipLevel, memberPoints, dateOfBirth) VALUES
 (1, 1, 'Somchai', 'Wongchai', 1, 450, '1990-05-12'),       -- Level 1: 450 pts
@@ -201,7 +214,13 @@ INSERT INTO Members (memberID, customerID, firstName, lastName, membershipLevel,
 (7, 7, 'Michael', 'Brown', 1, 900, '1995-11-15'),            -- Level 1: 900 pts
 (8, 8, 'Suda', 'Petchdee', 2, 3200, NULL),                   -- Level 2: 3200 pts
 (9, 9, 'David', 'Nguyen', 3, 8800, '1989-07-05'),            -- Level 3: 8800 pts
-(10, 10, 'Preeda', 'Chanakul', 4, 15700, NULL);             -- Level 4: 15700 pts
+(10, 10, 'Preeda', 'Chanakul', 4, 15700, NULL),             -- Level 4: 15700 pts
+-- Members who have not made any purchases or written any reviews yet
+(11, 11, 'Warin', 'Saetang', 1, 0, NULL),
+(12, 12, 'Thida', 'Boonyarit', 1, 0, NULL),
+(13, 13, 'Kevin', 'Lopez', 1, 0, NULL),
+(14, 14, 'Mina', 'Katsuragi', 1, 0, NULL),
+(15, 15, 'George', 'Hill', 1, 0, NULL);
 
 INSERT INTO Product (productCode, productType, weight, recyclePercentage, size, unitPrice) VALUES
 ('P1001', 'Shoes', 900, 30, '42', 3200.00),
@@ -213,7 +232,13 @@ INSERT INTO Product (productCode, productType, weight, recyclePercentage, size, 
 ('P1007', 'Bottle', 200, 70, '500ml', 350.00),
 ('P1008', 'Towel', 400, 60, 'XL', 500.00),
 ('P1009', 'Jacket', 1000, 30, 'XL', 3800.00),
-('P1010', 'Sandals', NULL, 20, '40', 700.00);
+('P1010', 'Sandals', NULL, 20, '40', 700.00),
+-- Products that are not bought by any customer (No cart and no reviews written about them)
+('P1011', 'Hat', 120, 10, 'Free', 299.00),
+('P1012', 'Keychain', NULL, 50, 'OneSize', 99.00),
+('P1013', 'Sticker Pack', NULL, NULL, 'OneSize', 49.00),
+('P1014', 'Laces', 20, NULL, 'Standard', 79.00),
+('P1015', 'Shoe Cleaner', 200, 30, 'Bottle', 159.00);
 
 -- Transaction Tables
 INSERT INTO Orders (orderID, customerID, phoneNumber, emailAddress, purchaseTime, purchaseStatus, companyName, TaxID) VALUES
@@ -261,38 +286,45 @@ INSERT INTO Cart (orderID, productCode, quantity) VALUES
 (29,'P1009',1),(30,'P1010',2);
 
 INSERT INTO Redeem (RewardID, MemberID, CustomerID, redeemStatus, redeemedDate) VALUES
-(1,1,1,1,'2025-04-10 09:30:00'),
-(2,2,2,0,NULL),
-(3,3,3,1,'2025-04-11 10:00:00'),
-(4,4,4,0,NULL),
-(5,5,5,1,'2025-04-11 11:15:00'),
-(6,6,6,1,'2025-04-12 12:00:00'),
-(7,7,7,0,NULL),
-(8,8,8,1,'2025-04-12 14:20:00'),
-(9,9,9,0,NULL),
-(10,10,10,1,'2025-04-13 09:10:00'),
+(1, 1, 1, 1, '2025-04-10 09:30:00'),
+(3, 1, 1, 0, NULL),
+(6, 1, 1, 1, '2025-04-11 10:00:00'),
 
-(1,2,2,1,'2025-04-13 10:10:00'),
-(2,3,3,1,'2025-04-13 11:10:00'),
-(3,4,4,0,NULL),
-(4,5,5,1,'2025-04-14 09:00:00'),
-(5,6,6,0,NULL),
-(6,7,7,1,'2025-04-14 10:15:00'),
-(7,8,8,1,'2025-04-14 12:00:00'),
-(8,9,9,0,NULL),
-(9,10,10,1,'2025-04-15 09:30:00'),
-(10,1,1,1,'2025-04-15 10:05:00'),
+(2, 2, 2, 1, '2025-04-13 10:10:00'),
+(7, 2, 2, 0, NULL),
+(1, 2, 2, 1, '2025-04-14 09:00:00'),
 
-(1,3,3,1,'2025-04-15 11:20:00'),
-(2,4,4,1,'2025-04-15 13:40:00'),
-(3,5,5,0,NULL),
-(4,6,6,1,'2025-04-16 10:10:00'),
-(5,7,7,0,NULL),
-(6,8,8,1,'2025-04-16 11:35:00'),
-(7,9,9,1,'2025-04-16 13:20:00'),
-(8,10,10,1,'2025-04-17 09:25:00'),
-(9,1,1,0,NULL),
-(10,2,2,1,'2025-04-17 11:50:00');
+(3, 3, 3, 1, '2025-04-11 10:00:00'),
+(1, 3, 3, 0, NULL),
+(6, 3, 3, 1, '2025-04-15 11:20:00'),
+
+(4, 4, 4, 1, '2025-04-14 09:00:00'),
+(8, 4, 4, 0, NULL),
+(2, 4, 4, 1, '2025-04-15 13:40:00'),
+
+(2, 5, 5, 1, '2025-04-11 11:15:00'),
+(7, 5, 5, 0, NULL),
+(1, 5, 5, 1, '2025-04-16 10:10:00'),
+
+(5, 6, 6, 1, '2025-04-12 12:00:00'),
+(8, 6, 6, 1, '2025-04-16 11:35:00'),
+(4, 6, 6, 0, NULL),
+
+(1, 7, 7, 1, '2025-04-14 12:00:00'),
+(3, 7, 7, 0, NULL),
+(6, 7, 7, 1, '2025-04-16 13:20:00'),
+
+(2, 8, 8, 1, '2025-04-12 14:20:00'),
+(7, 8, 8, 0, NULL),
+(1, 8, 8, 1, '2025-04-15 09:25:00'),
+
+(4, 9, 9, 1, '2025-04-16 13:20:00'),
+(8, 9, 9, 1, '2025-04-16 11:35:00'),
+(2, 9, 9, 0, NULL),
+
+(10, 10, 10, 1, '2025-04-13 09:10:00'),
+(5, 10, 10, 1, '2025-04-15 10:05:00'),
+(8, 10, 10, 0, NULL);
 
 INSERT INTO Review (reviewID, customerID, productCode, reviewTitle, commentText, submissionDate, rating) VALUES
 (1,1,'P1001','Great shoes','Very comfortable','2025-04-10 12:30',5),
