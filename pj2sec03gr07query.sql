@@ -78,11 +78,11 @@ WHERE c.orderID IS NULL;
 
 -- Saw Say Hae Khu
 
+-- WEHRE CLAUSE
 /*
 Objective: Retrieve Members who have redeemed a special event A reward (rewardID = 6)successfully
 Display memberID, full name, rewardID, Season and redeemedDate.
 */
--- WEHRE CLAUSE
 SELECT m.memberID, m.firstName, m.lastName,
        r.RewardID, r.Season, re.redeemedDate
 FROM Redeem re
@@ -90,35 +90,23 @@ JOIN Members m ON re.MemberID = m.memberID AND re.CustomerID = m.customerID
 JOIN Reward r ON r.RewardID = re.RewardID
 WHERE re.redeemStatus = 1 and re.RewardID = 6 ;
 
-
+-- BUILT-IN FUNCTIONS
 /*
 Objective: Retrieve orders that were made in April.
 Display the customer ID, first name, last name, order ID, purchase time, and purchase
 status.
 */
--- BUILT-IN FUNCTIONS
 SELECT c.customerID,c.firstName,c.lastName,o.orderID,    o.purchaseTime,o.purchaseStatus
 FROM Customer AS c
 JOIN Orders AS o
 ON c.customerID = o.customerID
 WHERE MONTH(o.purchaseTime) = 4;
 
-/*
-Objective: Retrieve members who never made orders.
-Display memberID, full name.
-*/
--- LEFT OUTER JOIN
-SELECT m.memberID, m.firstName, m.lastName
-FROM Members m
-LEFT JOIN Orders o ON m.customerID = o.customerID
-WHERE o.orderID IS NULL;
-
+-- AGGREGATE FUNCTION
 /*
 Objective: Retrieve members whose points are above average membership points.
 Display memberID, full name and membership points.
 */
--- AGGREGATE FUNCTION
-
 SELECT memberID, firstName, lastName, memberPoints
 FROM Members
 WHERE memberPoints > (
@@ -126,18 +114,27 @@ WHERE memberPoints > (
 )
 ORDER BY memberPoints DESC;
 
+--  INNER JOIN
 /*
 Objective: Retrieve orders which are still in the process of delivery.
 Display  deliveryID, orderID, customer’s full name, estimatedDeliveryDate, deliveryStatus.
 */
---  INNER JOIN
-
 SELECT d.deliveryID, o.orderID, c.firstName, c.lastName, d.estimatedDeliveryDate, d.deliveryStatus
 FROM Delivery d
 JOIN Orders o ON d.orderID = o.orderID
 JOIN Customer c ON o.customerID = c.customerID
 WHERE d.deliveryStatus = "Pending"
 ORDER by d.estimatedDeliveryDate;
+
+-- LEFT OUTER JOIN
+/*
+Objective: Retrieve members who never made orders.
+Display memberID, full name.
+*/
+SELECT m.memberID, m.firstName, m.lastName
+FROM Members m
+LEFT JOIN Orders o ON m.customerID = o.customerID
+WHERE o.orderID IS NULL;
 
 
 
