@@ -79,28 +79,65 @@ WHERE c.orderID IS NULL;
 -- Saw Say Hae Khu
 
 /*
-Objective: Retrieve customers whose first name or last name starts with J for promotion purposes.
-Display first name, last name, and customerID.
+Objective: Retrieve Members who have redeemed a special event A reward (rewardID = 6)successfully
+Display memberID, full name, rewardID, Season and redeemedDate.
 */
-SELECT customerID, firstName, lastName
-FROM Customer
-WHERE firstName LIKE 'P%' OR lastName LIKE 'P%';
+-- WEHRE CLAUSE
+SELECT m.memberID, m.firstName, m.lastName,
+       r.RewardID, r.Season, re.redeemedDate
+FROM Redeem re
+JOIN Members m ON re.MemberID = m.memberID AND re.CustomerID = m.customerID
+JOIN Reward r ON r.RewardID = re.RewardID
+WHERE re.redeemStatus = 1 and re.RewardID = 6 ;
 
--- Query 2: Must have at least one JOIN
+
 /*
 Objective: Retrieve orders that were made in April.
-Display the customer ID, first name, last name, order ID, purchase time, purchase
-status, and company name.
+Display the customer ID, first name, last name, order ID, purchase time, and purchase
+status.
 */
-SELECT 
-    c.customerID,
-    c.firstName,
-    c.lastName,
-    o.orderID,
-    o.purchaseTime,
-    o.purchaseStatus,
-    o.companyName
+-- BUILT-IN FUNCTIONS
+SELECT c.customerID,c.firstName,c.lastName,o.orderID,    o.purchaseTime,o.purchaseStatus
 FROM Customer AS c
 JOIN Orders AS o
-    ON c.customerID = o.customerID
+ON c.customerID = o.customerID
 WHERE MONTH(o.purchaseTime) = 4;
+
+/*
+Objective: Retrieve members who never made orders.
+Display memberID, full name.
+*/
+-- LEFT OUTER JOIN
+SELECT m.memberID, m.firstName, m.lastName
+FROM Members m
+LEFT JOIN Orders o ON m.customerID = o.customerID
+WHERE o.orderID IS NULL;
+
+/*
+Objective: Retrieve members whose points are above average membership points.
+Display memberID, full name and membership points.
+*/
+-- AGGREGATE FUNCTION
+
+SELECT memberID, firstName, lastName, memberPoints
+FROM Members
+WHERE memberPoints > (
+    SELECT AVG(memberPoints) FROM Members
+)
+ORDER BY memberPoints DESC;
+
+/*
+Objective: Retrieve orders which are still in the process of delivery.
+Display  deliveryID, orderID, customer’s full name, estimatedDeliveryDate, deliveryStatus.
+*/
+--  INNER JOIN
+
+SELECT d.deliveryID, o.orderID, c.firstName, c.lastName, d.estimatedDeliveryDate, d.deliveryStatus
+FROM Delivery d
+JOIN Orders o ON d.orderID = o.orderID
+JOIN Customer c ON o.customerID = c.customerID
+WHERE d.deliveryStatus = "Pending"
+ORDER by d.estimatedDeliveryDate;
+
+
+
