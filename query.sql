@@ -39,6 +39,8 @@ SELECT c.customerID as `Customer ID`, CONCAT(c.firstName, ' ', c.lastName) as Na
 memberID as `Member ID`, memberPoints as `Points`
 FROM Customer c INNER JOIN Members m ON c.customerID = m.customerID;
 
+-- Query 3: Must use aggregate functions,
+
 -- Saw Say Hae Khu
 
 /*

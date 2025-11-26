@@ -1,2 +1,2 @@
 # sportswear-ecommerce
-Simulate sportswear E-commerce databasae with MySQL
+Class project simulating a sportswear E-commerce database with MySQL
