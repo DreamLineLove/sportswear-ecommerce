@@ -1,51 +1,5 @@
 use sec03gr07db;
 
--- Junrui Mao
-
--- Query 1: Must have a WHERE clause with at least two or more conditions.
-/* Objective: Retrieve all members whose MemberPoints are greater than 1000 and 
-have MembershipLevel as 'Level 2'. Display MemberID, FirstName, and LastName. */
-SELECT MemberID, FirstName, LastName
-FROM Members
-WHERE MemberPoints > 1000 AND MembershipLevel = 2;
-
--- Query 2: Must use SQL built-in functions, for example, string function, numerical function, or date function.
-/* Objective: To display all reviews given by customers, showing the name of the customer, the title of the reviews,
-the body of the reviews, and the time and date on which the reviews were written, along with the star rating. */
-SELECT CONCAT(c.firstName, ' ', c.lastName) AS `Customer Name`,
-r.reviewTitle AS `Review Title`, r.commentText AS `Comment`,
-DATE(r.submissionDate) AS `On Date`, TIME(r.submissionDate) AS `At Time`, 
-r.rating AS `Stars Given`
-FROM Review r INNER JOIN Customer c ON c.customerID = r.customerID
-ORDER BY rating DESC;
-
--- Query 3: Must use aggregate functions, for example, SUM, AVG, MIN, MAX, with GROUP BY and HAVING
-/* Objective: Retrieve the total quantity sold for each product, 
-   and display only those products with total sales equaling at least 5. (The products that are most 
-   popular among customers) */
-SELECT p.productCode, p.productType, SUM(c.quantity) AS TotalSold
-FROM Product p
-INNER JOIN Cart c ON p.productCode = c.productCode
-GROUP BY p.productCode, p.productType
-HAVING TotalSold >= 5;
-
--- Query 4: Must have at least one INNER JOIN
-/* Objective: Retrieve all members who have redeemed rewards. Display MemberID, FirstName, 
-LastName, RewardID, and ExpirationDate. */
-SELECT M.MemberID, M.FirstName, M.LastName, R.RewardID, Re.ExpirationDate
-FROM Members M
-INNER JOIN Redeem R ON M.MemberID = R.MemberID
-INNER JOIN Reward Re ON R.RewardID = Re.RewardID;
-
--- Query 5: Must use any type of OUTER JOIN
-/* Objective: Retrieve all rewards along with the associated redemption details, 
-   even if they have not been redeemed yet. Display RewardID, Season, PointsRequired, 
-   and the MemberID (if available). */
-SELECT r.RewardID, r.Season, r.PointsRequired, m.memberID
-FROM Reward r
-LEFT OUTER JOIN Redeem re ON r.RewardID = re.RewardID
-LEFT OUTER JOIN Members m ON re.MemberID = m.memberID;
-
 -- Zwe Nyan Zaw
 
 -- Query 1: Must have a WHERE clause with at least two or more conditions.
@@ -87,7 +41,7 @@ Objective: To retrieve all voucher type rewards along with the voucher's season,
 to redeem that voucher. Display also the voucherCode, the discount percentage, and expiration date. 
 Sort by the expiration date.
 */
-SELECT v.rewardID, 
+SELECT v.rewardID AS `ID`, 
 	r.season AS `Season`, 
 	r.levelRequired AS `Level`, 
 	v.voucherCode AS `Voucher Code`, 
@@ -109,7 +63,7 @@ WHERE c.orderID IS NULL;
 
 -- Saw Say Hae Khu
 
--- WEHRE CLAUSE
+-- Query 6: Must have a WHERE clause with at least two or more conditions.
 /*
 Objective: Retrieve Members who have redeemed a special event A reward (rewardID = 6)successfully
 Display memberID, full name, rewardID, Season and redeemedDate.
@@ -121,7 +75,7 @@ JOIN Members m ON re.MemberID = m.memberID AND re.CustomerID = m.customerID
 JOIN Reward r ON r.RewardID = re.RewardID
 WHERE re.redeemStatus = 1 and re.RewardID = 6 ;
 
--- BUILT-IN FUNCTIONS
+-- Query 7: Must use SQL built-in functions, for example, string function, numerical function, or date function.
 /*
 Objective: Retrieve orders that were made in April.
 Display the customer ID, first name, last name, order ID, purchase time, and purchase
@@ -133,7 +87,7 @@ JOIN Orders AS o
 ON c.customerID = o.customerID
 WHERE MONTH(o.purchaseTime) = 4;
 
--- AGGREGATE FUNCTION
+-- Query 8: Must use aggregate functions, for example, SUM, AVG, MIN, MAX, with GROUP BY and HAVING
 /*
 Objective: Retrieve members whose points are above average membership points.
 Display memberID, full name and membership points.
@@ -145,7 +99,7 @@ WHERE memberPoints > (
 )
 ORDER BY memberPoints DESC;
 
---  INNER JOIN
+-- Query 9: Must have at least one INNER JOIN
 /*
 Objective: Retrieve orders which are still in the process of delivery.
 Display  deliveryID, orderID, customer’s full name, estimatedDeliveryDate, deliveryStatus.
@@ -157,7 +111,7 @@ JOIN Customer c ON o.customerID = c.customerID
 WHERE d.deliveryStatus = "Pending"
 ORDER by d.estimatedDeliveryDate;
 
--- LEFT OUTER JOIN
+-- Query 10: Must use any type of OUTER JOIN
 /*
 Objective: Retrieve members who never made orders.
 Display memberID, full name.
@@ -166,6 +120,52 @@ SELECT m.memberID, m.firstName, m.lastName
 FROM Members m
 LEFT JOIN Orders o ON m.customerID = o.customerID
 WHERE o.orderID IS NULL;
+
+-- Junrui Mao
+
+-- Query 11: Must have a WHERE clause with at least two or more conditions.
+/* Objective: Retrieve all members whose MemberPoints are greater than 1000 and 
+have MembershipLevel as 'Level 2'. Display MemberID, FirstName, and LastName. */
+SELECT MemberID, FirstName, LastName
+FROM Members
+WHERE MemberPoints > 1000 AND MembershipLevel = 2;
+
+-- Query 12: Must use SQL built-in functions, for example, string function, numerical function, or date function.
+/* Objective: To display all reviews given by customers, showing the name of the customer, the title of the reviews,
+the body of the reviews, and the time and date on which the reviews were written, along with the star rating. */
+SELECT CONCAT(c.firstName, ' ', c.lastName) AS `Customer Name`,
+r.reviewTitle AS `Review Title`, r.commentText AS `Comment`,
+DATE(r.submissionDate) AS `On Date`, TIME(r.submissionDate) AS `At Time`, 
+r.rating AS `Stars Given`
+FROM Review r INNER JOIN Customer c ON c.customerID = r.customerID
+ORDER BY rating DESC;
+
+-- Query 13: Must use aggregate functions, for example, SUM, AVG, MIN, MAX, with GROUP BY and HAVING
+/* Objective: Retrieve the total quantity sold for each product, 
+   and display only those products with total sales equaling at least 5. (The products that are most 
+   popular among customers) */
+SELECT p.productCode, p.productType, SUM(c.quantity) AS TotalSold
+FROM Product p
+INNER JOIN Cart c ON p.productCode = c.productCode
+GROUP BY p.productCode, p.productType
+HAVING TotalSold >= 5;
+
+-- Query 14: Must have at least one INNER JOIN
+/* Objective: Retrieve all members who have redeemed rewards. Display MemberID, FirstName, 
+LastName, RewardID, and ExpirationDate. */
+SELECT M.MemberID, M.FirstName, M.LastName, R.RewardID, Re.ExpirationDate
+FROM Members M
+INNER JOIN Redeem R ON M.MemberID = R.MemberID
+INNER JOIN Reward Re ON R.RewardID = Re.RewardID;
+
+-- Query 15: Must use any type of OUTER JOIN
+/* Objective: Retrieve all rewards along with the associated redemption details, 
+   even if they have not been redeemed yet. Display RewardID, Season, PointsRequired, 
+   and the MemberID (if available). */
+SELECT r.RewardID, r.Season, r.PointsRequired, m.memberID
+FROM Reward r
+LEFT OUTER JOIN Redeem re ON r.RewardID = re.RewardID
+LEFT OUTER JOIN Members m ON re.MemberID = m.memberID;
 
 
 
