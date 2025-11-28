@@ -109,8 +109,10 @@ Display memberID, full name and membership points.
 */
 SELECT memberID, firstName, lastName, memberPoints
 FROM Members
-WHERE memberPoints > (
-    SELECT AVG(memberPoints) FROM Members
+GROUP BY memberID, firstName, lastName, memberPoints
+HAVING memberPoints > (
+    SELECT AVG(memberPoints) 
+    FROM Members
 )
 ORDER BY memberPoints DESC;
 
