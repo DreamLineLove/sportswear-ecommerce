@@ -2,18 +2,49 @@ use sec03gr07db;
 
 -- Junrui Mao
 
+-- Query 1: Must have a WHERE clause with at least two or more conditions.
 /* Objective: Retrieve all members whose MemberPoints are greater than 1000 and 
 have MembershipLevel as 'Level 2'. Display MemberID, FirstName, and LastName. */
 SELECT MemberID, FirstName, LastName
 FROM Members
 WHERE MemberPoints > 1000 AND MembershipLevel = 2;
 
+-- Query 2: Must use SQL built-in functions, for example, string function, numerical function, or date function.
+/* Objective: To display all reviews given by customers, showing the name of the customer, the title of the reviews,
+the body of the reviews, and the time and date on which the reviews were written, along with the star rating. */
+SELECT CONCAT(c.firstName, ' ', c.lastName) AS `Customer Name`,
+r.reviewTitle AS `Review Title`, r.commentText AS `Comment`,
+DATE(r.submissionDate) AS `On Date`, TIME(r.submissionDate) AS `At Time`, 
+r.rating AS `Stars Given`
+FROM Review r INNER JOIN Customer c ON c.customerID = r.customerID
+ORDER BY rating DESC;
+
+-- Query 3: Must use aggregate functions, for example, SUM, AVG, MIN, MAX, with GROUP BY and HAVING
+/* Objective: Retrieve the total quantity sold for each product, 
+   and display only those products with total sales equaling at least 5. (The products that are most 
+   popular among customers) */
+SELECT p.productCode, p.productType, SUM(c.quantity) AS TotalSold
+FROM Product p
+INNER JOIN Cart c ON p.productCode = c.productCode
+GROUP BY p.productCode, p.productType
+HAVING TotalSold >= 5;
+
+-- Query 4: Must have at least one INNER JOIN
 /* Objective: Retrieve all members who have redeemed rewards. Display MemberID, FirstName, 
 LastName, RewardID, and ExpirationDate. */
 SELECT M.MemberID, M.FirstName, M.LastName, R.RewardID, Re.ExpirationDate
 FROM Members M
 INNER JOIN Redeem R ON M.MemberID = R.MemberID
 INNER JOIN Reward Re ON R.RewardID = Re.RewardID;
+
+-- Query 5: Must use any type of OUTER JOIN
+/* Objective: Retrieve all rewards along with the associated redemption details, 
+   even if they have not been redeemed yet. Display RewardID, Season, PointsRequired, 
+   and the MemberID (if available). */
+SELECT r.RewardID, r.Season, r.PointsRequired, m.memberID
+FROM Reward r
+LEFT OUTER JOIN Redeem re ON r.RewardID = re.RewardID
+LEFT OUTER JOIN Members m ON re.MemberID = m.memberID;
 
 -- Zwe Nyan Zaw
 
@@ -26,7 +57,7 @@ SELECT productCode, recyclePercentage AS `Recycle Percentage`, unitPrice AS `Uni
 FROM Product
 WHERE recyclePercentage >= 50 AND unitPrice <= 500;
 
--- SQL Query 2: Must use SQL built-in functions, for example, string function, numerical function, or date function.
+-- Query 2: Must use SQL built-in functions, for example, string function, numerical function, or date function.
 /*
 Objective: To display the combined firstname, lastname, member level, and age (where applicable)
 of all members, ordered by their name alphabetically.
@@ -57,11 +88,11 @@ to redeem that voucher. Display also the voucherCode, the discount percentage, a
 Sort by the expiration date.
 */
 SELECT v.rewardID, 
-r.season AS `Season`, 
-r.levelRequired AS `Level`, 
-v.voucherCode AS `Voucher Code`, 
-v.percentDiscount AS `% Discount`,
-DATE(r.expirationDate) AS `Expires`
+	r.season AS `Season`, 
+	r.levelRequired AS `Level`, 
+	v.voucherCode AS `Voucher Code`, 
+	v.percentDiscount AS `% Discount`,
+	DATE(r.expirationDate) AS `Expires`
 FROM Voucher v
 INNER JOIN Reward r ON v.rewardID = r.rewardID
 ORDER BY Expires;
